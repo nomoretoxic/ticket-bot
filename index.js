@@ -72,14 +72,14 @@ const rest = new REST({ version: '10' }).setToken(TOKEN);
 client.on('interactionCreate', async interaction => {
   if (interaction.isChatInputCommand() && interaction.commandName === 'ticketpanel') {
     const embed = new EmbedBuilder()
-      .setTitle('🎫 Support Ticket System')
+      .setTitle('Support Ticket System')
       .setDescription('Click the button below to create a new support ticket.')
       .setColor(0x5865F2);
 
     const row = new ActionRowBuilder().addComponents(
       new ButtonBuilder()
         .setCustomId('create_ticket')
-        .setLabel('🎟️ Create Ticket')
+        .setLabel('Create Ticket')
         .setStyle(ButtonStyle.Primary)
     );
 
@@ -93,11 +93,11 @@ client.on('interactionCreate', async interaction => {
 
   const guild = interaction.guild;
 
-  // ✅ CREATE TICKET
+  // CREATE TICKET
   if (interaction.customId === 'create_ticket') {
     const existing = guild.channels.cache.find(c => c.name === `ticket-${interaction.user.id}`);
     if (existing) {
-      return interaction.reply({ content: '❗ You already have an open ticket.', ephemeral: true });
+      return interaction.reply({ content: 'You already have an open ticket.', ephemeral: true });
     }
 
     const ticketChannel = await guild.channels.create({
@@ -121,22 +121,22 @@ client.on('interactionCreate', async interaction => {
     });
 
     const embed = new EmbedBuilder()
-      .setTitle('🎫 Ticket Created')
+      .setTitle('Ticket Created')
       .setDescription('Support will be with you soon.\nClick the button below to close this ticket.')
       .setColor(0x00FF00);
 
     const row = new ActionRowBuilder().addComponents(
       new ButtonBuilder()
         .setCustomId('close_ticket')
-        .setLabel('🔒 Close Ticket')
+        .setLabel('Close Ticket')
         .setStyle(ButtonStyle.Danger)
     );
 
     await ticketChannel.send({ content: `<@${interaction.user.id}>`, embeds: [embed], components: [row] });
-    await interaction.reply({ content: `✅ Your ticket has been created: ${ticketChannel}`, ephemeral: true });
+    await interaction.reply({ content: `Your ticket has been created: ${ticketChannel}`, ephemeral: true });
   }
 
-  // 🔒 CLOSE TICKET
+  // CLOSE TICKET
   if (interaction.customId === 'close_ticket') {
     const channel = interaction.channel;
 
@@ -148,7 +148,7 @@ client.on('interactionCreate', async interaction => {
       },
     ]);
 
-    await channel.send('🔒 Ticket closed. Thank you for contacting support!');
+    await channel.send('Ticket closed. Thank you for contacting support!');
   }
 });
 
