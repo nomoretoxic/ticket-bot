@@ -151,6 +151,13 @@ client.on('interactionCreate', async interaction => {
     await channel.send('Ticket closed. Thank you for contacting support!');
   }
 });
+// --- EXPRESS SERVER FOR RENDER (keeps Render happy) ---
+const app = express();
+app.get('/', (req, res) => res.send('🤖 Discord bot is running!'));
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`🌐 Listening on port ${PORT}`));
+
 
 // --- LOGIN BOT ---
 client.login(TOKEN);
