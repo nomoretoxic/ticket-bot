@@ -1,4 +1,5 @@
-import {
+
+cimport {
   Client,
   GatewayIntentBits,
   Partials,
@@ -13,17 +14,17 @@ import {
   SlashCommandBuilder
 } from 'discord.js';
 import dotenv from 'dotenv';
+import express from 'express'; // 👈 Added Express for Render compatibility
 
-// Load environment variables from .env (optional)
+// --- Load environment variables ---
 dotenv.config();
 
-// Load variables from environment
 const TOKEN = process.env.BOT_TOKEN;
 const CLIENT_ID = process.env.CLIENT_ID;
 const OPEN_CATEGORY_ID = process.env.OPEN_CATEGORY_ID;
 const CLOSED_CATEGORY_ID = process.env.CLOSED_CATEGORY_ID;
 
-// Debug: Check environment variables
+// --- Debug ---
 console.log("BOT_TOKEN:", TOKEN ? "SET" : "NOT SET");
 console.log("CLIENT_ID:", CLIENT_ID ? "SET" : "NOT SET");
 console.log("OPEN_CATEGORY_ID:", OPEN_CATEGORY_ID ? "SET" : "NOT SET");
@@ -72,7 +73,7 @@ const rest = new REST({ version: '10' }).setToken(TOKEN);
 client.on('interactionCreate', async interaction => {
   if (interaction.isChatInputCommand() && interaction.commandName === 'ticketpanel') {
     const embed = new EmbedBuilder()
-      .setTitle('Support Ticket System')
+      .setTitle('🎟️ Support Ticket System')
       .setDescription('Click the button below to create a new support ticket.')
       .setColor(0x5865F2);
 
@@ -97,7 +98,10 @@ client.on('interactionCreate', async interaction => {
   if (interaction.customId === 'create_ticket') {
     const existing = guild.channels.cache.find(c => c.name === `ticket-${interaction.user.id}`);
     if (existing) {
-      return interaction.reply({ content: 'You already have an open ticket.', ephemeral: true });
+      return interaction.reply({
+        content: '⚠️ You already have an open ticket.',
+        flags: 64 // replaces deprecated "ephemeral: true"
+      });
     }
 
     const ticketChannel = await guild.channels.create({
@@ -121,7 +125,7 @@ client.on('interactionCreate', async interaction => {
     });
 
     const embed = new EmbedBuilder()
-      .setTitle('Ticket Created')
+      .setTitle('✅ Ticket Created')
       .setDescription('Support will be with you soon.\nClick the button below to close this ticket.')
       .setColor(0x00FF00);
 
@@ -133,7 +137,10 @@ client.on('interactionCreate', async interaction => {
     );
 
     await ticketChannel.send({ content: `<@${interaction.user.id}>`, embeds: [embed], components: [row] });
-    await interaction.reply({ content: `Your ticket has been created: ${ticketChannel}`, ephemeral: true });
+    await interaction.reply({
+      content: `🎫 Your ticket has been created: ${ticketChannel}`,
+      flags: 64 // replaces deprecated "ephemeral: true"
+    });
   }
 
   // CLOSE TICKET
@@ -148,16 +155,16 @@ client.on('interactionCreate', async interaction => {
       },
     ]);
 
-    await channel.send('Ticket closed. Thank you for contacting support!');
+    await channel.send('🗑️ Ticket closed. Thank you for contacting support!');
   }
 });
+
 // --- EXPRESS SERVER FOR RENDER (keeps Render happy) ---
 const app = express();
-app.get('/', (req, res) => res.send('🤖 Discord bot is running!'));
+app.get('/', (req, res) => res.send('🤖 Discord bot is running and connected to Discord API.'));
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`🌐 Listening on port ${PORT}`));
-
 
 // --- LOGIN BOT ---
 client.login(TOKEN);
