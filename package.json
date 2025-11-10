@@ -1,17 +1,20 @@
 {
-  "name": "ticket-bot",
+  "name": "discord-ticket-bot",
   "version": "1.0.0",
-  "description": "Discord Ticket Bot",
-  "main": "index.js",
+  "description": "A Discord support ticket bot built with discord.js and deployable on Render.",
   "type": "module",
+  "main": "index.js",
   "scripts": {
     "start": "node index.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
-    "discord.js": "^14.16.3",
-    "dotenv": "^16.4.5"
-  }
+    "discord.js": "^14.15.3",
+    "dotenv": "^16.3.1",
+    "express": "^4.21.1"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "author": "YourName",
+  "license": "MIT"
 }
